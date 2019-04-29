@@ -9,4 +9,10 @@ Environment variables:
    $OC_USERNAME   Username
    $OC_PASSWORD   Password
    $OC_SERVER     AnyConnect server
-   $UPSTREAM      Upstream
+   $UPSTREAM      Upstream host
+   $UPSTREAM_PORT Upstream port
+
+NOTE
+
+   You will need to run this container with `--privileged` and the `NET_ADMIN` capability (`--cap-add=NET_ADMIN`)
+   If you do not, it will not be able to set up routing, and you won't be able to reach the upstream.
