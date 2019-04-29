@@ -1,0 +1,12 @@
+This is a very, very simple, single-purpose container.
+It starts openconnect, and then haproxy.
+
+Haproxy forwards traffic on TCP4 port 65534 to a single port
+on a single host ($UPSTREAM)
+
+Environment variables:
+
+   $OC_USERNAME   Username
+   $OC_PASSWORD   Password
+   $OC_SERVER     AnyConnect server
+   $UPSTREAM      Upstream
