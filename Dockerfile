@@ -12,4 +12,5 @@ RUN  chmod ug+x /oc.sh
 
 COPY --chown=root:root run.sh /run.sh
 
-CMD /run.sh
+VOLUME   ["/srv/proxy"]
+CMD      /run.sh
