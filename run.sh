@@ -87,15 +87,16 @@ global
    maxconn 9999
    user root
    group root
+   daemon
 
 defaults
-   timeout connect 15s
-   timeout client 15s
-   timeout server 15s
+   timeout connect 25s
+   timeout client 10h
+   timeout server 10h
    mode tcp
 
 frontend container_frontend
-   bind 0.0.0.0:65534
+   bind *:$UPSTREAM_PORT
    default_backend container_backend
 
 backend container_backend
@@ -106,6 +107,7 @@ PROX
 start_haproxy
 
 echo "$(date) Started. OpenConnect has PID $(get_oc_pid), haproxy has PID $(get_haproxy_pid)"
+echo "$(date) Proxying (any):$UPSTREAM_PORT => $UPSTREAM:$UPSTREAM_PORT"
 echo "$(date) Entering liveness test loop."
 
 while true; do
@@ -113,6 +115,7 @@ while true; do
    if ! check_oc; then
       echo "$(date) Restarting OpenConnect client"
       start_oc
+      echo "$(date) OpenConnect now has PID $(get_oc_pid)"
    elif ! check_upstream; then
       echo "$(date) Upstream not responding. Asking OC to reconnect."
       reconnect_oc
@@ -121,6 +124,7 @@ while true; do
    if ! check_haproxy; then
       echo "$(date) Restarting haproxy"
       start_haproxy
+      echo "$(date) haproxy now has PID $(get_haproxy_pid)"
    fi
    sleep 30
 done
