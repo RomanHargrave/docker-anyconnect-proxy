@@ -6,11 +6,12 @@ ARG OC_SCRIPT=oc.sh
 RUN apt update
 RUN apt install -y openconnect haproxy vpnc-scripts iproute2 iputils-ping
 
-COPY --chown=root:root ${OC_CONFIG} /oc.cfg
-COPY --chown=root:root ${OC_SCRIPT} /oc.sh
-RUN  chmod ug+x /oc.sh
+COPY /oc.cfg
+COPY /oc.sh
+RUN  chown root:root /oc.cfg /oc.sh && chmod ug+x /oc.sh
 
-COPY --chown=root:root run.sh /run.sh
+COPY run.sh /run.sh
+RUN  chown root:root /run.sh
 
 VOLUME   ["/srv/proxy"]
 CMD      /run.sh
