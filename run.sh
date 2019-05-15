@@ -1,11 +1,11 @@
 #!/bin/bash
 
 _pid_file=/oc.pid
-_cfg_file=/oc.cfg
+_cfg_file=${OC_CONFIG_FILE:-/oc.cfg}
 _hac_file=/haproxy.cfg
 _hap_file=/haproxy.pid
 
-OC_OPTS="--background --pid-file=$_pid_file --config=$_cfg_file $OC_EXTRA_OPTS"
+OC_OPTS="--background --pid-file=$_pid_file --config=${OC_CONFIG_FILE:-/oc.cfg} $OC_EXTRA_OPTS"
 
 
 ################################################
@@ -15,7 +15,7 @@ OC_OPTS="--background --pid-file=$_pid_file --config=$_cfg_file $OC_EXTRA_OPTS"
 start_oc() {
    if [ "x$OC_PASSWORD" != "x" ]; then
       if [ "x$OC_USERNAME" = "x" ]; then echo "password is set, but username is not"; exit 22; fi
-      /usr/sbin/openconnect $OC_OPTS --user="$OC_USERNAME" --passwd-on-stdin "$OC_SERVER" <<< "$OC_PASSWORD"
+      echo -n "$OC_PASSWORD" | /usr/sbin/openconnect $OC_OPTS --user="$OC_USERNAME" --passwd-on-stdin "$OC_SERVER"
    else
       /usr/sbin/openconnect $OC_OPTS "$OC_SERVER"
    fi
